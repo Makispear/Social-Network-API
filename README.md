@@ -1,4 +1,5 @@
 # Social-Network-API
+[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 
 ## Description
 An API building platform that utilizes MongoDB and Mongoose to manage data for a social network
