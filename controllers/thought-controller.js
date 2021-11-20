@@ -34,7 +34,7 @@ const thoughtController = {
     // delete thought 
     deleteThought({ params }, res) {
         Thought.findOneAndDelete({ _id: params.id })
-        .then(dbThoughtData =>  dbThoughtData ? res.json(dbThoughtData) : res.status(404).json({ message: "not found" }))
+        .then(dbThoughtData =>  dbThoughtData ? res.json(dbThoughtData) : res.status(404).json({ message: thought404Message(params.id) }))
         .catch(err => res.status(404).json(err))
     },
 
@@ -42,7 +42,7 @@ const thoughtController = {
     createReaction({ params, body }, res) {
         Thought.findOneAndUpdate({ _id: params.thoughtId }, { $push: { reactions: body } }, { new: true, runValidators: true })
         .then(dbThoughtData =>  dbThoughtData ? res.json(dbThoughtData) : res.status(404).json({ message: thought404Message(params.id) }))
-        .catch(err => res.json(err))
+        .catch(err => res.status(404).json(err))
     },
 }
 
