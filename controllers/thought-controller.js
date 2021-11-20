@@ -13,6 +13,8 @@ const thoughtController = {
     getThoughtById({ params }, res) {
         Thought.findOne({ _id: params.id })
         .select('-__v')
+            // populate 
+            .populate({ path: 'reactions', select: '-__v' })
         .then(dbThoughtData =>  dbThoughtData ? res.json(dbThoughtData) : res.status(404).json({ message: thought404Message(params.id) }))
         .catch(err => res.status(404).json(err))
     },

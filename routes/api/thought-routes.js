@@ -20,7 +20,7 @@ router
 .delete(deleteThought)
 
 router
-.route(':thoughtId/reactions')
+.route('/:thoughtId/reactions')
 .post(createReaction)
 
 module.exports = router
