@@ -20,12 +20,6 @@ const reactionSchema = new Schema(
             default: Date.now
             // place getter here for formatting date
         }
-    },
-    {
-        toJSON: {
-            // uncomment after placing getter
-            // getters: true 
-        }
     }
 )
 
@@ -39,7 +33,7 @@ const thoughtSchema = new Schema(
         },
         createdAt: {
             type: Date,
-            default: date.now
+            default: Date.now
             // place getter here for formatting date 
         },
         username: {

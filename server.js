@@ -8,7 +8,7 @@
 // MONGOOSE 
     const mongoose = require('mongoose')
 
-    mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/', {
+    mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/Social-Network-Api', {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })
@@ -24,7 +24,7 @@
     mongoose.set('debug', true)
 
 // FILES
-
+app.use(require('./routes'));
 
 
 // Server Listen 
