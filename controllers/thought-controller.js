@@ -21,7 +21,7 @@ const thoughtController = {
 
     // add a thought
     createThought({ body }, res) {
-        Thought.create(body)
+        Thought.create({thoughtText: body.thoughtText, username: body.username}, { $push: { thoughts: { userId: body.userId} } })
         .then(dbThoughtData => res.json(dbThoughtData))
         .catch(err => res.status(400).json(err))
     },
@@ -40,12 +40,22 @@ const thoughtController = {
         .catch(err => res.status(404).json(err))
     },
 
-    // add a friend to thought
+    // add a reaction to thought
     createReaction({ params, body }, res) {
-        Thought.findOneAndUpdate({ _id: params.thoughtId }, { $push: { reactions: body } }, { new: true, runValidators: true })
+        Thought.findOneAndUpdate(
+            { _id: params.thoughtId },
+            { $push: { reactions: { reactionBody: body.reactionBody, username: body.username} } },
+            { new: true, runValidators: true })
         .then(dbThoughtData =>  dbThoughtData ? res.json(dbThoughtData) : res.status(404).json({ message: thought404Message(params.id) }))
         .catch(err => res.status(404).json(err))
     },
+
+    // remove a reaction from thought
+    removeReaction({ params }, res) {
+        Thought.findOneAndUpdate({ _id: params.userId}, { $pull: { reactions: { thoughtId: params.thoughtId} } })
+        .then(dbThoughtData =>  dbThoughtData ? res.json(dbThoughtData) : res.status(404).json({ message: thought404Message(params.id) }))
+        .catch(err => res.status(404).json(err))
+    }
 }
 
 module.exports = thoughtController
