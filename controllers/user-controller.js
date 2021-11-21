@@ -1,5 +1,6 @@
 const { User } = require('../models')
 const user404Message = (id) => `User with ID: ${id} not found!`
+const user204Message = (id) => `User with ID: ${id} has been deleted!`
 
 const userController = {
     // get all users 
@@ -39,21 +40,21 @@ const userController = {
     // delete user 
     deleteUser({ params }, res) {
         User.findOneAndDelete({ _id: params.id })
-        .then(dbUserData =>  dbUserData ? res.json(dbUserData) : res.status(404).json({ message: user404Message(params.id) }))
+        .then(dbUserData =>  dbUserData ? res.status(200).json({ message: user204Message(params.id)}) : res.status(404).json({ message: user404Message(params.id) }))
         .catch(err => res.status(400).json(err))
     },
 
     // add a friend to user
     addFriend({ params }, res) {
-        User.findOneAndUpdate({ _id: params.userId}, { $push: { friends: { friendId: params.friendId} } }, { new: true, runValidators: true })
+        User.findOneAndUpdate({ _id: params.userId}, { $push: { friends: params.friendId } }, { new: true, runValidators: true })
         .then(dbUserData => res.json(dbUserData))
         .catch(err => res.json(err))
     },
 
     // remove a friend from user 
     removeFriend({ params }, res) {
-        User.findOneAndUpdate({ _id: params.userId}, { $pull: { friends: { friendId: params.friendId} } })
-        .then(dbUserData => res.json(dbUserData))
+        User.findOneAndUpdate({ _id: params.userId}, { $pull: { friends: params.friendId} })
+        .then(dbUserData => res.status(204).json(dbUserData))
         .catch(err => res.json(err))
     }
 }
