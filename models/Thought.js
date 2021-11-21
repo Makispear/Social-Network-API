@@ -1,6 +1,5 @@
 const { Schema, model } = require('mongoose')
 
-
 const reactionSchema = new Schema(
     {
         reactionId: {
@@ -38,11 +37,15 @@ const thoughtSchema = new Schema(
             // place getter here for formatting date 
         },
         username: {
+            type: String,
+            required: true
+        },
+        reactions: [
+            {
                 type: Schema.Types.ObjectId,
-                ref: 'User'
-        }
-        ,
-        reactions: [reactionSchema]
+
+            }
+        ]
     },
     {
         toJSON: {
