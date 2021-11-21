@@ -40,24 +40,20 @@ const thoughtSchema = new Schema(
             type: String,
             required: true
         },
-        reactions: [
-            {
-                type: Schema.Types.ObjectId,
-
-            }
-        ]
+        reactions: [reactionSchema]
     },
     {
         toJSON: {
-            virtuals: true
+            virtuals: true,
             // uncomment after placing getter
             // getters: true 
-        }
+        },
+        id: false
     }
 )
 
 thoughtSchema.virtual('reactionCount').get(function() {
-    return this.reactions.reduce((totalReactions, reaction) => totalReactions + reaction, 0);
+    return this.reactions.Length;
 });
 
 const Thought = model('Thought', thoughtSchema)

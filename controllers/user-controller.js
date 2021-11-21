@@ -5,7 +5,8 @@ const userController = {
     // get all users 
     getAllUsers(req, res) {
         User.find({})
-        .populate({ path: 'thoughts', select: '-__v' })
+        .populate({ path: 'thoughts', select: '-__v'})
+        .populate({ path: 'friends', select: '-__v'})
         .select('-__v')
         .then(dbUserData => res.json(dbUserData))
         .catch(err => res.status(400).json(err))
@@ -14,9 +15,8 @@ const userController = {
     // get one user by ID
     getUserById({ params }, res) {
         User.findOne({ _id: params.id })
-            // populate thought and friend data here 
-            .populate({ path: 'friends', select: '-__v' })
-            .populate({ path: 'thoughts', select: '-__v'})
+        .populate({ path: 'friends', select: '-__v' })
+        .populate({ path: 'thoughts', populate: { path: 'reactions'}})
         .select('-__v')
         .then(dbUserData =>  dbUserData ? res.json(dbUserData) : res.status(404).json({ message: user404Message(params.id) }))
         .catch(err => res.status(404).json(err))

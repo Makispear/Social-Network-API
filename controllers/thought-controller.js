@@ -5,16 +5,17 @@ const thoughtController = {
     // get all thoughts 
     getAllThoughts(req, res) {
         Thought.find({})
+        .populate({ path: 'reactions', select: '-__v' })
+        .select('-__v')
         .then(dbThoughtData => res.json(dbThoughtData))
         .catch(err => res.status(400).json(err))
     },
 
     // get one thought by ID
     getThoughtById({ params }, res) {
-        Thought.findOne({ id: params.id })
+        Thought.findOne({ _id: params.id })
+        .populate({ path: 'reactions', select: '-__v' })
         .select('-__v')
-            // populate 
-            .populate({ path: 'reactions', select: '-__v' })
         .then(dbThoughtData =>  dbThoughtData ? res.json(dbThoughtData) : res.status(404).json({ message: thought404Message(params.id) }))
         .catch(err => res.status(404).json(err))
     },
