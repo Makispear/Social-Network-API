@@ -38,9 +38,10 @@ const thoughtSchema = new Schema(
             // place getter here for formatting date 
         },
         username: {
-            type: String,
-            required: true
-        },
+                type: Schema.Types.ObjectId,
+                ref: 'User'
+        }
+        ,
         reactions: [reactionSchema]
     },
     {
