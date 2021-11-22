@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose')
+const { format_date } = require('../utils/formatter')
 
 const reactionSchema = new Schema(
     {
@@ -17,8 +18,13 @@ const reactionSchema = new Schema(
         },
         createdAt: {
             type: Date,
-            default: Date.now
-            // place getter here for formatting date
+            default: Date.now,
+            get: (time) => format_date(time)
+        }
+    },
+    {
+        toJSON: {
+            getters: true
         }
     }
 )
@@ -33,8 +39,8 @@ const thoughtSchema = new Schema(
         },
         createdAt: {
             type: Date,
-            default: Date.now
-            // place getter here for formatting date 
+            default: Date.now,
+            get: (time) => format_date(time) 
         },
         username: {
             type: String,
@@ -45,8 +51,7 @@ const thoughtSchema = new Schema(
     {
         toJSON: {
             virtuals: true,
-            // uncomment after placing getter
-            // getters: true 
+            getters: true 
         },
         id: false
     }
