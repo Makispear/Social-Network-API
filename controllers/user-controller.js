@@ -1,4 +1,4 @@
-const { User } = require('../models')
+const { User, Thought } = require('../models')
 const user404Message = (id) => `User with ID: ${id} not found!`
 const user204Message = (id) => `User with ID: ${id} has been deleted!`
 
@@ -10,14 +10,14 @@ const userController = {
         .populate({ path: 'friends', select: '-__v'})
         .select('-__v')
         .then(dbUserData => res.json(dbUserData))
-        .catch(err => res.status(400).json(err))
+        .catch(err => res.status(500).json(err))
     },
 
     // get one user by ID
     getUserById({ params }, res) {
         User.findOne({ _id: params.id })
         .populate({ path: 'friends', select: '-__v' })
-        .populate({ path: 'thoughts', populate: { path: 'reactions'}})
+        .populate({ path: 'thoughts', select: '-__v', populate: { path: 'reactions'}})
         .select('-__v')
         .then(dbUserData =>  dbUserData ? res.json(dbUserData) : res.status(404).json({ message: user404Message(params.id) }))
         .catch(err => res.status(404).json(err))
@@ -25,7 +25,7 @@ const userController = {
 
     // add a new user 
     createUser({ body }, res) {
-        User.create(body)
+        User.create({ username: body.username, email: body.email})
         .then(dbUserData => res.json(dbUserData))
         .catch(err => res.status(400).json(err))
     },
@@ -40,7 +40,18 @@ const userController = {
     // delete user 
     deleteUser({ params }, res) {
         User.findOneAndDelete({ _id: params.id })
-        .then(dbUserData =>  dbUserData ? res.status(200).json({ message: user204Message(params.id)}) : res.status(404).json({ message: user404Message(params.id) }))
+        .then(dbUserData => {
+            if (!dbUserData) {
+                return res.status(404).json({ message: user404Message(params.id) })
+            }
+            return dbUserData
+        })
+        .then(deletedUserData => {
+            console.log('\n\n\n\n\n')
+            console.log(deletedUserData)
+            Thought.DeleteMany({ username: deletedUserData.username})
+            res.json('done')
+        })
         .catch(err => res.status(400).json(err))
     },
 
