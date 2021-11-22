@@ -1,11 +1,11 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model, Types } = require('mongoose')
 const { format_date } = require('../utils/formatter')
 
 const reactionSchema = new Schema(
     {
         reactionId: {
             type: Schema.Types.ObjectId,
-            // default: () => new Types.ObjectId()
+            default: () => new Types.ObjectId()
         },
         reactionBody: {
             type: String,
@@ -25,7 +25,8 @@ const reactionSchema = new Schema(
     {
         toJSON: {
             getters: true
-        }
+        },
+        id: false
     }
 )
 
@@ -34,8 +35,8 @@ const thoughtSchema = new Schema(
         thoughtText: {
             type: String,
             required: true,
-            min: 1,
-            max: 280
+            minlength: 1,
+            maxLength: 280
         },
         createdAt: {
             type: Date,
