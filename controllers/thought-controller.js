@@ -1,6 +1,7 @@
 const { Thought, User } = require('../models')
 const thought404Message = (id) => `Thought with ID: ${id} not found!`
-const thought200Message = (id) => `Reaction with ID: ${id} has been deleted!`
+const thought200Message = (id) => `Thought with ID: ${id} has been deleted!`
+const reaction200Message = (id) => `Reaction with ID: ${id} has been deleted!`
 
 const thoughtController = {
     // get all thoughts 
@@ -9,7 +10,7 @@ const thoughtController = {
         .populate({ path: 'reactions', select: '-__v' })
         .select('-__v')
         .then(dbThoughtData => res.json(dbThoughtData))
-        .catch(err => res.status(400).json(err))
+        .catch(err => res.status(500).json(err))
     },
 
     // get one thought by ID
@@ -50,13 +51,13 @@ const thoughtController = {
             { $push: { reactions: { reactionBody: body.reactionBody, username: body.username} } },
             { new: true, runValidators: true })
         .then(dbThoughtData =>  dbThoughtData ? res.json(dbThoughtData) : res.status(404).json({ message: thought404Message(params.id) }))
-        .catch(err => res.status(404).json(err))
+        .catch(err => res.status(400).json(err))
     },
 
     // remove a reaction from thought
     removeReaction({ params }, res) {
         Thought.findOneAndUpdate({ _id: params.thoughtId}, { $pull: { reactions: { _id: params.reactionId} } }, { new: true})
-        .then(dbThoughtData =>  dbThoughtData ? res.json(thought200Message(dbThoughtData.thoughtId)) : res.status(404).json({ message: thought404Message(params.id) }))
+        .then(dbThoughtData =>  dbThoughtData ? res.json(reaction200Message(params.thoughtId)) : res.status(404).json({ message: thought404Message(params.id) }))
         .catch(err => res.status(404).json(err))
     }
 }
