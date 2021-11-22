@@ -54,7 +54,7 @@ const thoughtController = {
 
     // remove a reaction from thought
     removeReaction({ params }, res) {
-        Thought.findOneAndUpdate({ _id: params.userId}, { $pull: { reactions: { thoughtId: params.thoughtId} } })
+        Thought.findOneAndUpdate({ _id: params.thoughtId}, { $pull: { reactions: { thoughtId: params.thoughtId} } })
         .then(dbThoughtData =>  dbThoughtData ? res.json(dbThoughtData) : res.status(404).json({ message: thought404Message(params.id) }))
         .catch(err => res.status(404).json(err))
     }
