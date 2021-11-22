@@ -44,13 +44,7 @@ const userController = {
             if (!dbUserData) {
                 return res.status(404).json({ message: user404Message(params.id) })
             }
-            return dbUserData
-        })
-        .then(deletedUserData => {
-            console.log('\n\n\n\n\n')
-            console.log(deletedUserData)
-            Thought.DeleteMany({ username: deletedUserData.username})
-            res.json('done')
+            Thought.deleteMany({ username: dbUserData.username}).then(deletedData => deletedData ? res.json(deletedData) : res.status(404).json({ message: user404Message(params.id) }))
         })
         .catch(err => res.status(400).json(err))
     },
