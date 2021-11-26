@@ -29,7 +29,7 @@ Initialize the app by typing in the root of the project folder ```npm start```.
 
 ## Questions
 * For any questions regarding this project, you can reach me via my personal [e-mail](mailto:maki-miko@hotmail.com) .
-* Click [here](https://drive.google.com/file/d/15GzCtSq9Z9E6UNiWK9JQaze_SNGLQewY/view?usp=sharing) for demonstration video.
+* Click [here](https://drive.google.com/file/d/15GzCtSq9Z9E6UNiWK9JQaze_SNGLQewY/view?usp=sharing) for demonstration video (Note: There was a fix in the video, now the friends list is populated to view the friends info.).
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
